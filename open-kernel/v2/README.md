@@ -1,5 +1,5 @@
 # Open Kernel 2
-Aiming for better documentation than Linux:tm:
+Aiming for Better Documentation Than Linux:tm:
 
 Open Kernel 2 is the successor to the original Open Kernel, featuring various new features and improvements. It largely follows the monolithic-kernel design, with most system initialization done in `/boot/kernel.lua`.
 
