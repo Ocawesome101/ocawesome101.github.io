@@ -1,5 +1,7 @@
-*NAME*
-        buffer - implementation of Lua's FILE api
+**NAME**
 
-*DESCRIPTION*
-        see *https://ocdoc.cil.li/api:buffer*
+buffer - implementation of Lua's FILE api
+
+**DESCRIPTION**
+
+ See https://ocdoc.cil.li/api:buffer.
