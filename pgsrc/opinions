@@ -1,0 +1,5 @@
+%{&lt; @Main{./index.html} | @ULOS{./ulos} | @Cynosure{./ulos/cynosure} | *brightwhite{Opinions} &gt;}
+%{*brightwhite{My Opinions}
+  My opinions on various topis, whether political, social, or otherwise.
+
+  2021.09.17 @Abortion{./abortions.html}}
