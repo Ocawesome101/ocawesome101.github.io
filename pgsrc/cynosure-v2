@@ -1,0 +1,18 @@
+%{@Back{./blog.html}}
+%{*brightwhite{Cynosure 2.0}
+  If you haven't heard of it (let's face it, if you're on this website you probably have), I am the author and sole maintainer of one of the better Unix-like operating systems for OpenComputers - the aptly named Unix-Like Operating System.
+  
+  I started development of ULOS's Cynosure kernel back in January, as I desired a better-structured operating system than either Monolith or Apotheosis.  My goals included a faster VT100 emulator, a better process management system, proper permissions management, proper support for custom filesystems, and a cleaner separation between userspace and kernel space (i.e., if one so desires, one may use only the kernel and write their own userspace independent of ULOS's).  The project expanded to include features such as pre-emptive multitasking, and now pulls off most of its major goals;  support for custom filesystems has not been put through its paces (and likely never will be), and permissions are only half-implemented (user permissions are there, but no file permissions).
+
+  The thing that spurred me to begin development of the next generation of Cynosure was my attempt to develop a @luaposix{https://luaposix.github.io/luaposix} compatibility layer.  During said attempt, I realized that, while Cynosure's user-level API works well for most Lua development, it lines up very little with the more traditional C standard library on which luaposix is built.  Rather than build such an API upon what Cynosure provides, which would most likely result in lower compatibility with some programs, I have decided to rewrite most of Cynosure into Cynosure 2.0.}
+%{*brightwhite{Goals}
+    - Actual native support for booting from a custom filesystem (the first to be supported is the Cynosure File System, for which I have mostly completed a driver);
+      &gt; This comes with the side effect of making managed filesystems a bit of a second-class citizen.  I intend to support them, but it is not a priority.
+      &gt; This is primarily so that file permissions are supported everywhere.
+    - A more POSIX-like user-facing API, such that a Luaposix compatibility layer is simple;
+    - Proper support for executable formats.
+
+  I have some other goals, too, but those are the primary ones.
+}
+%{*brightwhite{Source Code}
+  Cynosure 2.0's source code is on GitHub at @https://github.com/ocawesome101/cynosure-2.0{https://github.com/ocawesome101/cynosure-2.0}.  It is not even remotely ready for use at the time of writing.}
