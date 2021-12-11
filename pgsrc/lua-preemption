@@ -1,0 +1,31 @@
+%{@Back{./blog.html}}
+%{*brightwhite{Pre-emptive Multitasking in Lua, without the debug library}
+  One of the more notable features I added to @the original Cynosure kernel{https://github.com/ocawesome101/oc-cynosure} was pre-emptive multitasking.  When the full *brightwhite{debug} API is available, such as under @ComputerCraft{https://computercraft.cc}, this is a fairly simple thing to do.  However, OpenComputers only provides a very restricted version of the *brightwhite{debug} API, since its sandbox is written in Lua and as such could easily be broken if it did not wrap said API.
+
+  All this to say, the *brightwhite{debug.sethook} function, necessary for pre-emption, is not present in OpenComputers.  This means that I needed to find another way to do pre-emption.  My solution was to wrap the *brightwhite{load} function.
+
+  After talking it over with some people on Discord, I added an initial implementation of this feature in commit @e8e2c0c{https://github.com/Ocawesome101/oc-cynosure/commit/e8e2c0c3fc219c6ba4cc792155c04f9083101353}.  The version in that commit was quite primitive and did not respect code contained in strings.  For programs that write to EEPROMs, for example, this could break things significantly.  My initial implementation also just yielded every time an if, while, or for statement was detected - which, as you might imagine, was quite slow in OpenComputers.
+
+  My solution to the last problem was an *brightwhite{__internal_yield} function, which would check the last time the current process yielded and decide whether to actually yield based on that.  (@cba6d42{https://github.com/Ocawesome101/oc-cynosure/commit/cba6d42ca3712888fcd009d9972d7eb222a90bfe})
+
+  I quite significantly rewrote the feature in @b671504{https://github.com/Ocawesome101/oc-cynosure/commit/b671504980269615e9f28ecf2730b2b800c00fd5} to avoid processing code inside strings, with patch-ups in @89e90a1{https://github.com/Ocawesome101/oc-cynosure/commit/89e90a16a0397ac5ed4a1727c2dc986a9d7ffd31} and @aeecc1f{https://github.com/Ocawesome101/oc-cynosure/commit/aeecc1fe45fb691d936b2fc5201a4eaede3b45c4}, by which point it was much closer to actually usable.  The last step was to make the *brightwhite{__internal_yield} function not eat signals, which I did in @726a19b2{https://github.com/Ocawesome101/oc-cynosure/commit/726a19b2}.  While writing this article, I came across one final issue, which is fixed by @4ab303d{https://github.com/Ocawesome101/oc-cynosure/commit/4ab303d96f7e723124ed7ddf46daec829158b064}.
+
+  Now, how does this feature work?}
+%{*brightwhite{How It Works}
+  You may wish to follow along with the relevant source code, which is @here{https://github.com/ocawesome101/oc-cynosure/blob/dev/base/load.lua}.
+
+  At the beginning of the file, there is a table of patterns.  These patterns dictate when to insert calls to the *brightwhite{__internal_yield} function.
+
+  Then, there is the *brightwhite{process_section} function, which iterates over that table and calls *brightwhite{string.gsub} with whatever is contained in each item of that table, plus the provided section of code.  This works remarkably well.
+
+  The *brightwhite{process} function takes a chunk of code.  It iterates over this code, finding any quotes that may be present.  If it finds a quote, then it will process all code up to that quote with a call to itself, and set its internal state to reflect that it is now inside a string;  if it is already inside a string, then it will update the internal state accordingly.  If it does not find a quote, it will check for a multiline declaration (two *brightwhite{[} characters, with any number of *brightwhite{=}s between them).  It will call *brightwhite{process_section} on the section of code leading up to this declaration, and then skip the multiline section.  If the *brightwhite(process) function does not find either of these, it will simply concatenate the result of the *brightwhite{process_section} function and return.
+
+  Let's move on to the *brightwhite{load} wrapper function.  This takes all the arguments that the standard Lua *brightwhite{load} does.  Once it has obtained the string it is to load, however, things get fancier.
+
+  The first thing it does is call the *brightwhite{process} function on the chunk.  It then loads the chunk and, if that fails, returns *magenta{nil} and an error message.  However, if loading the chunk does not fail, then *brightwhite{load} returns another wrapper function.  This wrapper saves the last yield time, and any previous instance of *brightwhite{__internal_yield} or *brightwhite{coroutine.yield} that may have been present in the provided environment.  It then overrides them as follows:
+    - *brightwhite{__internal_yield}: if it's been more than the maximum time since the program last yielded, then yield.  If the yield returns a signal, then save that to the local signal queue *brightwhite{ysq}.
+    - *brightwhite{coroutine.yield}: if there is a signal available in the locla signal queue, then return it; otherwise, update the last yield time and yield, passing through any arguments it may be passed.
+
+  After this is done, the original function (returned by the standard *brightwhite{load}) is called, the values of *brightwhite{__internal_yield} and *brightwhite{coroutine.yield} restored, and the results of the function call returned.}
+%{*brightwhite{Conclusion}
+  I hope you've learned something from this article.  If you have any questions, message me at *brightwhite{Ocawesome101#5343} on Discord.  I'm also accessible through *brightwhite{#oc} on @irc.esper.net{https://irc.esper.net} most of the time.}
