@@ -46,7 +46,9 @@
 
   You can download the resulting image @here{https://oz-craft.pickardayune.com/downloads/486linux.img.xz}.  You should be able to burn it directly to a hard drive*brightwhite{[3]} and boot it on just about any machine with at least 9MB of RAM - any less than that and Linux fails to decompress, at least in QEMU.  Mind that with 9MB you only get about 750KB of memory to work with, but it does boot.  I've included almost the full set of BusyBox utilities as well as Lua.  Pretty much all of the init setup comes from Krzysztof Krystian Jankowski's @Floppinux{https://bits.p1x.in/floppinux-an-embedded-linux-on-a-single-floppy/} tutorial.  The default credentials are *brightwhite{root} / *brightwhite{root}.
 
-  @Here{https://oz-craft.pickardayune.com/vid-compaq-presario-486sx-linux.mp4} is a (slightly outdated) video of the system booting.  Since recording I've made a few modifications, and switched from LZMA to LZO for kernel compression, which made kernel decompression at least 200% faster.}
+  @Here{https://oz-craft.pickardayune.com/vid-compaq-presario-486sx-linux-new.mp4} is a video of the system booting.  (*brightwhite{Edited 2022-01-01: added updated video})
+
+  @Here{https://oz-craft.pickardayune.com/vid-compaq-presario-486sx-linux.mp4} is a (slightly outdated) video of the system booting.  Since recording this video I've switched from LZMA to LZO for kernel compression, which made kernel decompression at least 200% faster.}
 %{*brightwhite{Footnotes}
   *brightwhite{1.}  The stock drive was 200MB.
   *brightwhite{2.}  The BIOS can only see 5GB or so of it.  I only put in such a large hard drive because that was what I found on Amazon.
