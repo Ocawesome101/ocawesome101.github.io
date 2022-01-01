@@ -1,0 +1,52 @@
+%{@Back{./blog.html}}
+%{*brightwhite{Linux on a 486SX}
+  A year or two ago, I came into posession of a 1993 Compaq Presario 425.  It's a Mac-ish all-in-one with a 14" color (S?)VGA screen capable of 800x600 in full 256-color glory.  On the inside it features a 25MHz i486SX (the sort without a floating-point unit), paired with 20MB of RAM - a significant upgrade over the stock 4MB.  When I received it it had a nearly-dead 1.6GB hard drive*brightwhite{[1]} in it, which I replaced with a far overkill 150GB drive*brightwhite{[2]}.  It also has a single 3.5" floppy drive.  On the back it has two PS/2 ports for keyboard and mouse input, serial and parallel ports, and two ports for the built-in modem.  There is also what appears to be a sound card, along with a single 36-pin connector I don't recognize.
+
+  The hard drive it came with had (as far as I can tell) the stock Windows for Workgroups 3.1 (*brightwhite{not} 3.11) installation, with Wolfenstein 3D and a couple other games.  It had clearly been heavily used and contained a large amount of personal data.}
+%{*brightwhite{But can it run Linux?}
+  I've spent the past several months trying on and off to make Linux run on the Presario.  The 486SX is the oldest CPU Linux still supports!  I was quite hindered by my lack of any floppy disks - fortunately, I managed to get my hands on a few working ones for Christmas this year and made some headway, first getting MS-DOS 6.22 installed on the new hard disk, then messing with the Linux kernel configuration until I got it to work.
+
+  And yesterday I finally got it!  Here are the steps for configuring a basic kernel with Linux 5.14.8.
+
+  Begin with *code{make tinyconfig}.  Then run *code{make menuconfig}, and change at least the following options:
+    - Under *code{General setup}, turn on *{Configure standard kernel features -> Enable support for printk}, and change the kernel compression mode to *code{LZO} for faster decompression.
+    - Under *code{Processor type and features}, change *code{Processor family} to *code{486SX}.  Turn on *code{Enable the LDT} and *code{Math emulation}. Change *code{Physical address where the kernel is loaded} to *code{0x400000} (only necessary for bigger kernels, but good to have).
+    - Under *code{Bus options (PCI  etc.)}, enable *code{ISA support}.
+    - Turn on *code{Enable the block layer}.
+    - Under *code{Executable file formats}, turn on *code{Kernel support for ELF binaries} and *code{Kernel support for scripts starting with #!}.
+    - Under *code{Device drivers}:
+      - Turn on *code{Block devices} and *code{Block devices -> Normal floppy disk support}.
+      - Under *code{SCSI device support}:
+        - Turn on *code{SCSI disk support}.
+        - Turn on *code{SCSI generic support}.
+      - Under *code{Serial ATA and Parallel ATA drivers (libata)}:
+        - Turn on *code{ATA SFF support}.
+        - Turn on *code{Generic platform device PATA support}.
+        - Turn on *code{Legacy ISA PATA support}.
+      - Make sure *code{Input devices -> Keyboards -> AT keyboard} is enabled.
+      - Under *code{Character devices}:
+        - Turn on *code{Enable TTY}.
+        - Turn on *code{TTY driver to output user messages via printk}.
+      - Make sure *code{Graphics support -> Console display driver support -> VGA text console} is enabled.
+    - Under *code{File systems}, enable *code{Second extended fs support}, *code{DOS/FAT/EXFAT/NT filesystems -> MSDOS fs support}, and *code{DOS/FAT/EXFAT/NT filesystems -> VFAT (Windows-95) fs support}.
+    - Under *code{File systems -> Pseudo filesystems}, enable *code{/proc file system support} and *code{sysfs file system support}.
+  
+  If you've done everything correctly you should have a working kernel.  Mine has some other convenience things enabled, but the above is the bare minimum for Linux to boot.
+
+  For the init system and coreutils I chose @BusyBox{https://busybox.net} as it's extremely lightweight.  I built it with @musl-cross-make{https://github.com/richfelker/musl-cross-make}.
+
+  For loading the kernel I used *brightwhite{Syslinux} on a FAT partition with the following configuration:
+
+    *brightwhite{DEFAULT lin
+    LABEL lin
+      LINUX /linux
+      APPEND rw loglevel=5 root=/dev/sda2}
+
+  Putting this all together the result is a system image of about 16MB in size (though the image I actually created is 128MB to give some extra space).  It's surprisingly responsive for a 30-year-old machine, and only takes around 50 seconds to do a cold boot - not much longer than Windows 95, and at least 30 seconds of that is the BIOS doing a memory test.
+
+  You can download the resulting image @here{https://oz-craft.pickardayune.com/downloads/486linux.img.xz}.  You should be able to burn it directly to a hard drive*brightwhite{[3]} and boot it on just about any machine with at least 9MB of RAM - any less than that and Linux fails to decompress, at least in QEMU.  Mind that with 9MB you only get about 750KB of memory to work with, but it does boot.  I've included almost the full set of BusyBox utilities as well as Lua.  Pretty much all of the init setup comes from Krzysztof Krystian Jankowski's @Floppinux{https://bits.p1x.in/floppinux-an-embedded-linux-on-a-single-floppy/} tutorial.}
+%{*brightwhite{Footnotes}
+  *brightwhite{1.}  The stock drive was 200MB.
+  *brightwhite{2.}  The BIOS can only see 5GB or so of it.  I only put in such a large hard drive because that was what I found on Amazon.
+  *brightwhite{3.}  After *code{unxz}-ing it, of course.
+}
