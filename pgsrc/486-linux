@@ -9,7 +9,7 @@
   And yesterday I finally got it!  Here are the steps for configuring a basic kernel with Linux 5.14.8.
 
   Begin with *code{make tinyconfig}.  Then run *code{make menuconfig}, and change at least the following options:
-    - Under *code{General setup}, turn on *{Configure standard kernel features -> Enable support for printk}, and change the kernel compression mode to *code{LZO} for faster decompression.
+    - Under *code{General setup}, turn on *code{Configure standard kernel features -> Enable support for printk}, and change the kernel compression mode to *code{LZO} for faster decompression.
     - Under *code{Processor type and features}, change *code{Processor family} to *code{486SX}.  Turn on *code{Enable the LDT} and *code{Math emulation}. Change *code{Physical address where the kernel is loaded} to *code{0x400000} (only necessary for bigger kernels, but good to have).
     - Under *code{Bus options (PCI  etc.)}, enable *code{ISA support}.
     - Turn on *code{Enable the block layer}.
