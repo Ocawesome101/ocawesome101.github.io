@@ -1,6 +1,6 @@
 %{@Back{./blog.html}}
 %{*brightwhite{Pre-emption 2: Electric Boogaloo}
-  On *brightwhite{December 10} I published @a writeup{./lua-preemption.html} of the pre-emption method I use in @Cynosure{https://github.com/ocawesome101/oc-cynosure}.
+  On *brightwhite{December 10, 2021}, I published @a writeup{./lua-preemption.html} of the pre-emption method I use in @Cynosure{https://github.com/ocawesome101/oc-cynosure}.
 
   While writing that article, I came across a fairly critical bug that in said article I glossed over because fixing it meant rewriting the entire code processor.  The time has come, though, and I had to write a preemption implementation for @Cynosure 2{https://github.com/ocawesome101/oc-cynosure-2}.
 
@@ -23,6 +23,8 @@
     *brightwhite{-} If the open bracket is followed by some number of *code{=}s and *brightwhite{then} an open bracket, it matches the balance of that and adds the result to the result string: e.g. for *code{[===[} it will find *code{]===]}} and treat that as a string.
     *brightwhite{-} Otherwise, it ignores the bracket and continues.
 
-  This logic is a little simpler than the previous implementation, and doesn't freak out over multiline strings with quotes in them.  All-in-all I think it's a much-needed improvement.}
+  This logic is a little simpler than the previous implementation, and doesn't freak out over multiline strings with quotes in them.  All-in-all I think it's a much-needed improvement.
+
+  Aside from the above stuff, everything in the previous article still applies to the original Cynosure.}
 %{*{Conclusion}
   I hope you learned something from this article.  If you have any questions, message me at *brightwhite{Ocawesome101#5343} on Discord or through *brightwhite{#oc} on @EsperNet{irc.esper.net}.}
