@@ -20,7 +20,7 @@
 
   When it finds an open bracket:
     *brightwhite{-} If that open bracket is immediately followed by another one, this is the beginning of a multiline string.  It will find the closest following *code{]]} and attach that to the result string.
-    *brightwhite{-} If the open bracket is followed by some number of *code{=}s and *brightwhite{then} an open bracket, it matches the balance of that and adds the result to the result string: e.g. for *code{[===[} it will find *code{]===]}} and treat that as a string.
+    *brightwhite{-} If the open bracket is followed by some number of *code{=}s and *brightwhite{then} an open bracket, it matches the balance of that and adds the result to the result string: e.g. for *code{[===[} it will find *code{]===]}and treat that as a string.
     *brightwhite{-} Otherwise, it ignores the bracket and continues.
 
   This logic is a little simpler than the previous implementation, and doesn't freak out over multiline strings with quotes in them.  All-in-all I think it's a much-needed improvement.
