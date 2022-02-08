@@ -14,7 +14,7 @@
 
   Then there is the *code{wrap} function.
 
-  This function takes in a chunk of code.  It iterates through that chunk of code and finds either a quote ('") or an open bracket ([).
+  This function takes in a chunk of code.  It iterates through that chunk of code and finds either a quote (*brightwhite{'"}) or an open bracket (*brightwhite{[}).
 
   When it finds a quote, it will flip the internal variable *code{in_str}.  There's some extra logic around matching up quote pairs.
 
