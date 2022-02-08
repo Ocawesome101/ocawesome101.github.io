@@ -1,4 +1,6 @@
 %{@Back{./blog.html}}
+%{*brightwhite{Update 2022-02-08: An updated version of this writeup is @here{./lua-preemption-2.html}.}
+}
 %{*brightwhite{Pre-emptive Multitasking in Lua, without the debug library}
   One of the more notable features I added to @the original Cynosure kernel{https://github.com/ocawesome101/oc-cynosure} was pre-emptive multitasking.  When the full *brightwhite{debug} API is available, such as under @ComputerCraft{https://computercraft.cc}, this is a fairly simple thing to do.  However, OpenComputers only provides a very restricted version of the *brightwhite{debug} API, since its sandbox is written in Lua and as such could easily be broken if it did not wrap said API.
 

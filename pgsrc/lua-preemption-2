@@ -1,0 +1,28 @@
+%{@Back{./blog.html}}
+%{*brightwhite{Pre-emption 2: Electric Boogaloo}
+  On *brightwhite{December 10} I published @a writeup{./lua-preemption.html} of the pre-emption method I use in @Cynosure{https://github.com/ocawesome101/oc-cynosure}.
+
+  While writing that article, I came across a fairly critical bug that in said article I glossed over because fixing it meant rewriting the entire code processor.  The time has come, though, and I had to write a preemption implementation for @Cynosure 2{https://github.com/ocawesome101/oc-cynosure-2}.
+
+  The code for that is @here{https://github.com/Ocawesome101/oc-cynosure-2/blob/dev/src/scheduler/preempt.lua}.  You may follow along if you wish.
+
+  So what's different about this new code?}
+%{*brightwhite{How It Works}
+  As with the previous implementation, there is a table of patterns; the primary difference is that there are more of them.  They also use Cynosure 2's randomized *code{sysyield} function name to prevent overriding the preemption bits.
+
+  After that table there is the *code{gsub} function, which takes a chunk of code and replaces all the patterns in it.
+
+  Then there is the *code{wrap} function.
+
+  This function takes in a chunk of code.  It iterates through that chunk of code and finds either a quote ('") or an open bracket ([).
+
+  When it finds a quote, it will flip the internal variable *code{in_str}.  There's some extra logic around matching up quote pairs.
+
+  When it finds an open bracket:
+    *brightwhite{-} If that open bracket is immediately followed by another one, this is the beginning of a multiline string.  It will find the closest following *code{]]} and attach that to the result string.
+    *brightwhite{-} If the open bracket is followed by some number of *code{=}s and *brightwhite{then} an open bracket, it matches the balance of that and adds the result to the result string: e.g. for *code{[===[} it will find *code{]===]}} and treat that as a string.
+    *brightwhite{-} Otherwise, it ignores the bracket and continues.
+
+  This logic is a little simpler than the previous implementation, and doesn't freak out over multiline strings with quotes in them.  All-in-all I think it's a much-needed improvement.}
+%{*{Conclusion}
+  I hope you learned something from this article.  If you have any questions, message me at *brightwhite{Ocawesome101#5343} on Discord or through *brightwhite{#oc} on @EsperNet{irc.esper.net}.}
