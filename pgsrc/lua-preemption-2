@@ -26,5 +26,5 @@
   This logic is a little simpler than the previous implementation, and doesn't freak out over multiline strings with quotes in them.  All-in-all I think it's a much-needed improvement.
 
   Aside from the above stuff, everything in the previous article still applies to the original Cynosure.}
-%{*{Conclusion}
+%{*brightwhite{Conclusion}
   I hope you learned something from this article.  If you have any questions, message me at *brightwhite{Ocawesome101#5343} on Discord or through *brightwhite{#oc} on @EsperNet{irc.esper.net}.}
